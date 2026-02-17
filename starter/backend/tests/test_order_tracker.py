@@ -27,3 +27,10 @@ def order_tracker(mock_storage):
 #
 # --- TODO: add test functions below this line ---
 #
+def test_add_order_stores_new_order(order_tracker):
+    storage = order_tracker.storage
+    order = {"id": "some_id", "item_name": "some_item", "quantity": 1, "customer_id": "some_customer", "status": "some_status"}
+    
+    order_tracker.add_order(order["id"], order["item_name"], order["quantity"], order["customer_id"], order["status"])
+    
+    storage.save_order.assert_called_once_with(order["id"], order)
