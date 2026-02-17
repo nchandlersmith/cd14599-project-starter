@@ -34,3 +34,7 @@ def test_add_order_stores_new_order(order_tracker):
     order_tracker.add_order(order["id"], order["item_name"], order["quantity"], order["customer_id"], order["status"])
     
     storage.save_order.assert_called_once_with(order["id"], order)
+    
+def test_add_order_fails_with_missing_fields(order_tracker):
+    with pytest.raises(ValueError, match="Missing the following required fields: id, item_name, quantity, customer_id"):
+        order_tracker.add_order(None, None, None, None)
