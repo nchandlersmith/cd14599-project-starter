@@ -14,9 +14,7 @@ class OrderTracker:
         self.storage = storage
 
     def add_order(self, order_id: str, item_name: str, quantity: int, customer_id: str, status: str = "pending"):
-        if order_id is None or item_name is None or quantity is None or customer_id is None:
-            raise ValueError("Missing the following required fields: id, item_name, quantity, customer_id")
-        
+        self._validate_order(order_id, item_name, quantity, customer_id)
         self.storage.save_order(order_id, {
             "id": order_id,
             "item_name": item_name,
@@ -36,3 +34,16 @@ class OrderTracker:
 
     def list_orders_by_status(self, status: str):
         pass
+
+    def _validate_order(self, order_id, item_name, quantity, customer_id):
+        missing_fields = []
+        if order_id is None:
+            missing_fields.append("order_id")
+        if item_name is None:
+            missing_fields.append("item_name")
+        if quantity is None:
+            missing_fields.append("quantity")
+        if customer_id is None:
+            missing_fields.append("customer_id")
+        if missing_fields:
+            raise ValueError(f"Missing the following required fields: {', '.join(missing_fields)}")

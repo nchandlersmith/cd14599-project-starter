@@ -35,6 +35,13 @@ def test_add_order_stores_new_order(order_tracker):
     
     storage.save_order.assert_called_once_with(order["id"], order)
     
-def test_add_order_fails_with_missing_fields(order_tracker):
-    with pytest.raises(ValueError, match="Missing the following required fields: id, item_name, quantity, customer_id"):
-        order_tracker.add_order(None, None, None, None)
+@pytest.mark.parametrize("order_id, item_name, quantity, customer_id, expected_error", [
+    (None, "item", 1, "customer", "Missing the following required fields: order_id"),
+    ("id", None, 1, "customer", "Missing the following required fields: item_name"),
+    ("id", "item", None, "customer", "Missing the following required fields: quantity"),  
+    ("id", "item", 1, None, "Missing the following required fields: customer_id"),
+    (None, None, None, None, "Missing the following required fields: order_id, item_name, quantity, customer_id")        
+])
+def test_add_order_fails_with_missing_fields(order_tracker, order_id, item_name, quantity, customer_id, expected_error):
+    with pytest.raises(ValueError, match=expected_error):
+        order_tracker.add_order(order_id, item_name, quantity, customer_id)
