@@ -6,11 +6,13 @@ class OrderTracker:
     Manages customer orders, providing functionalities to add, update,
     and retrieve order information.
     """
+
     def __init__(self, storage):
         required_methods = ['save_order', 'get_order', 'get_all_orders']
         for method in required_methods:
             if not hasattr(storage, method) or not callable(getattr(storage, method)):
-                raise TypeError(f"Storage object must implement a callable '{method}' method.")
+                raise TypeError(
+                    f"Storage object must implement a callable '{method}' method.")
         self.storage = storage
 
     def add_order(self, order_id: str, item_name: str, quantity: int, customer_id: str, status: str = "pending"):
@@ -46,4 +48,5 @@ class OrderTracker:
         if customer_id is None:
             missing_fields.append("customer_id")
         if missing_fields:
-            raise ValueError(f"Missing the following required fields: {', '.join(missing_fields)}")
+            raise ValueError(
+                f"Missing the following required fields: {', '.join(missing_fields)}")

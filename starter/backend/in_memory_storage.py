@@ -6,6 +6,7 @@ class InMemoryStorage:
     A simple in-memory implementation of the storage interface.
     Stores orders in a Python dictionary.
     """
+
     def __init__(self):
         self._orders = {}
 

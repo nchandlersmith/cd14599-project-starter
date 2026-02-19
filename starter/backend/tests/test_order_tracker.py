@@ -1,8 +1,9 @@
-import pytest
 from unittest.mock import Mock
+import pytest
 from ..order_tracker import OrderTracker
 
 # --- Fixtures for Unit Tests ---
+
 
 @pytest.fixture
 def mock_storage():
@@ -17,6 +18,7 @@ def mock_storage():
     mock.get_all_orders.return_value = {}
     return mock
 
+
 @pytest.fixture
 def order_tracker(mock_storage):
     """
@@ -27,20 +29,26 @@ def order_tracker(mock_storage):
 #
 # --- TODO: add test functions below this line ---
 #
+
+
 def test_add_order_stores_new_order(order_tracker):
     storage = order_tracker.storage
-    order = {"id": "some_id", "item_name": "some_item", "quantity": 1, "customer_id": "some_customer", "status": "some_status"}
-    
-    order_tracker.add_order(order["id"], order["item_name"], order["quantity"], order["customer_id"], order["status"])
-    
+    order = {"id": "some_id", "item_name": "some_item", "quantity": 1,
+             "customer_id": "some_customer", "status": "some_status"}
+
+    order_tracker.add_order(order["id"], order["item_name"],
+                            order["quantity"], order["customer_id"], order["status"])
+
     storage.save_order.assert_called_once_with(order["id"], order)
-    
+
+
 @pytest.mark.parametrize("order_id, item_name, quantity, customer_id, expected_error", [
     (None, "item", 1, "customer", "Missing the following required fields: order_id"),
     ("id", None, 1, "customer", "Missing the following required fields: item_name"),
-    ("id", "item", None, "customer", "Missing the following required fields: quantity"),  
+    ("id", "item", None, "customer", "Missing the following required fields: quantity"),
     ("id", "item", 1, None, "Missing the following required fields: customer_id"),
-    (None, None, None, None, "Missing the following required fields: order_id, item_name, quantity, customer_id")        
+    (None, None, None, None,
+     "Missing the following required fields: order_id, item_name, quantity, customer_id")
 ])
 def test_add_order_fails_with_missing_fields(order_tracker, order_id, item_name, quantity, customer_id, expected_error):
     with pytest.raises(ValueError, match=expected_error):
