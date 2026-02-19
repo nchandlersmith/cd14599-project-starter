@@ -8,11 +8,7 @@ class OrderTracker:
     """
 
     def __init__(self, storage):
-        required_methods = ['save_order', 'get_order', 'get_all_orders']
-        for method in required_methods:
-            if not hasattr(storage, method) or not callable(getattr(storage, method)):
-                raise TypeError(
-                    f"Storage object must implement a callable '{method}' method.")
+        self._validate_storage(storage)
         self.storage = storage
 
     def add_order(self, order_id: str, item_name: str, quantity: int, customer_id: str, status: str = "pending"):
@@ -36,6 +32,13 @@ class OrderTracker:
 
     def list_orders_by_status(self, status: str):
         pass
+
+    def _validate_storage(self, storage):
+        required_methods = ['save_order', 'get_order', 'get_all_orders']
+        for method in required_methods:
+            if not hasattr(storage, method) or not callable(getattr(storage, method)):
+                raise TypeError(
+                    f"Storage object must implement the following callable methods: {', '.join(required_methods)}.")
 
     def _validate_order(self, order_id, item_name, quantity, customer_id):
         missing_fields = []

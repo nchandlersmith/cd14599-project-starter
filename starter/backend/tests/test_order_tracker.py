@@ -31,8 +31,8 @@ def order_tracker(mock_storage):
 #
 
 
-def constructor_fails_with_non_callable_storage():
-    with pytest.raises(TypeError, match="Storage object must implement a callable 'save_order' method."):
+def test_constructor_fails_with_non_callable_storage():
+    with pytest.raises(TypeError, match="Storage object must implement the following callable methods: save_order, get_order, get_all_orders."):
         OrderTracker(None)
 
 
@@ -58,7 +58,7 @@ def test_add_order_stores_new_order(order_tracker):
 def test_add_order_fails_with_missing_fields(order_tracker, order_id, item_name, quantity, customer_id, expected_error):
     with pytest.raises(ValueError, match=expected_error):
         order_tracker.add_order(order_id, item_name, quantity, customer_id)
-        
+
 
 @pytest.mark.parametrize("quantity", [0, -1, "foo"])
 def test_add_order_fails_with_invalid_quantity(order_tracker, quantity):
