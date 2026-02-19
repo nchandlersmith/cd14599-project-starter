@@ -64,3 +64,13 @@ def test_add_order_fails_with_missing_fields(order_tracker, order_id, item_name,
 def test_add_order_fails_with_invalid_quantity(order_tracker, quantity):
     with pytest.raises(ValueError, match="Quantity must be a positive integer."):
         order_tracker.add_order("id", "item", quantity, "customer")
+        
+def test_get_order_by_id_returns_order(order_tracker, mock_storage):
+    order = {"id": "some_id", "item_name": "some_item", "quantity": 1,
+             "customer_id": "some_customer", "status": "some_status"}
+    mock_storage.get_order.return_value = order
+
+    result = order_tracker.get_order_by_id("some_id")
+
+    assert result == order
+    mock_storage.get_order.assert_called_once_with("some_id")

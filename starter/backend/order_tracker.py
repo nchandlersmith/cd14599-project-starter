@@ -22,7 +22,7 @@ class OrderTracker:
         })
 
     def get_order_by_id(self, order_id: str):
-        pass
+        return self.storage.get_order(order_id)
 
     def update_order_status(self, order_id: str, new_status: str):
         pass
