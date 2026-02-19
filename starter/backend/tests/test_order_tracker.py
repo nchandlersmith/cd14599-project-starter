@@ -53,3 +53,7 @@ def test_add_order_stores_new_order(order_tracker):
 def test_add_order_fails_with_missing_fields(order_tracker, order_id, item_name, quantity, customer_id, expected_error):
     with pytest.raises(ValueError, match=expected_error):
         order_tracker.add_order(order_id, item_name, quantity, customer_id)
+        
+def test_add_order_fails_with_non_callable_storage():
+    with pytest.raises(TypeError, match="Storage object must implement a callable 'save_order' method."):
+        OrderTracker(None)
