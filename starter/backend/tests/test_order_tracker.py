@@ -58,3 +58,9 @@ def test_add_order_stores_new_order(order_tracker):
 def test_add_order_fails_with_missing_fields(order_tracker, order_id, item_name, quantity, customer_id, expected_error):
     with pytest.raises(ValueError, match=expected_error):
         order_tracker.add_order(order_id, item_name, quantity, customer_id)
+        
+
+@pytest.mark.parametrize("quantity", [0, -1, "foo"])
+def test_add_order_fails_with_invalid_quantity(order_tracker, quantity):
+    with pytest.raises(ValueError, match="Quantity must be a positive integer."):
+        order_tracker.add_order("id", "item", quantity, "customer")

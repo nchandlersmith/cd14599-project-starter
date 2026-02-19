@@ -50,3 +50,5 @@ class OrderTracker:
         if missing_fields:
             raise ValueError(
                 f"Missing the following required fields: {', '.join(missing_fields)}")
+        if not isinstance(quantity, int) or quantity < 1:
+            raise ValueError("Quantity must be a positive integer.")
