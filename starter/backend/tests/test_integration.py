@@ -45,15 +45,14 @@ def test_get_order_by_id_integration_success(storage):
     storage.save_order(expected_order["id"], expected_order)
 
     result = order_tracker.get_order_by_id("some_id")
+    
     assert result == expected_order
 
 
 @pytest.mark.integration
 def test_get_order_by_id_integration_not_found(storage):
     order_tracker = OrderTracker(storage)
-
     result = order_tracker.get_order_by_id("nonexistent_id")
-
     assert result is None
 
 
@@ -80,3 +79,29 @@ def test_get_order_by_id_integration_returns_correct_order(storage):
     result = order_tracker.get_order_by_id("id2")
 
     assert result == order2
+    
+
+def test_get_all_orders_success(storage):
+    order_tracker = OrderTracker(storage)
+    order1 = {
+        "id": "id1",
+        "item_name": "item1",
+        "quantity": 1,
+        "customer_id": "customer1",
+        "status": "status1"
+    }
+    order2 = {
+        "id": "id2",
+        "item_name": "item2",
+        "quantity": 2,
+        "customer_id": "customer2",
+        "status": "status2"
+    }
+    storage.save_order(order1["id"], order1)
+    storage.save_order(order2["id"], order2)
+
+    result = order_tracker.list_all_orders()
+
+    assert len(result) == 2
+    assert order1 in result
+    assert order2 in result

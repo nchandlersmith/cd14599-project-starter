@@ -1,6 +1,7 @@
 import pytest
 from backend.app import app, in_memory_storage
 
+
 @pytest.fixture
 def client():
     app.config['TESTING'] = True
@@ -22,9 +23,13 @@ def test_add_order_api_success(client):
 
 @pytest.mark.api
 def test_get_order_api_success(client):
-    client.post('/api/orders', json={
+    order = {
         "order_id": "GET001", "item_name": "Test Item", "quantity": 1, "customer_id": "C1"
-    })
+    }
+    # Directly use the in-memory storage to set up the order for retrieval.
+    # This allows us to test the API's ability to retrieve existing orders without relying on the add_order API.
+    in_memory_storage.save_order(order["order_id"], order)
+    client.post('/api/orders', json=order)
     response = client.get('/api/orders/GET001')
     assert response.status_code == 200
     assert response.json['order_id'] == "GET001"

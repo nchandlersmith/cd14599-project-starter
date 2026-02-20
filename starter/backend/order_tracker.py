@@ -14,7 +14,7 @@ class OrderTracker:
     def add_order(self, order_id: str, item_name: str, quantity: int, customer_id: str, status: str = "pending"):
         self._validate_order(order_id, item_name, quantity, customer_id)
         self.storage.save_order(order_id, {
-            "id": order_id,
+            "order_id": order_id,
             "item_name": item_name,
             "quantity": quantity,
             "customer_id": customer_id,
@@ -28,7 +28,7 @@ class OrderTracker:
         pass
 
     def list_all_orders(self):
-        pass
+        return None
 
     def list_orders_by_status(self, status: str):
         pass
