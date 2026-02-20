@@ -30,3 +30,18 @@ def test_add_order_integration_success(storage):
                             expected_order["quantity"], expected_order["customer_id"], expected_order["status"])
 
     assert storage.get_order("some_id") == expected_order
+    
+@pytest.mark.integration
+def test_get_order_by_id_integration_success(storage):
+    order_tracker = OrderTracker(storage)
+    expected_order = {
+        "id": "some_id",
+        "item_name": "some_item",
+        "quantity": 1,
+        "customer_id": "some_customer",
+        "status": "some_status"
+    }
+    storage.save_order(expected_order["id"], expected_order)
+
+    result = order_tracker.get_order_by_id("some_id")
+    assert result == expected_order
