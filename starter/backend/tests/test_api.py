@@ -66,6 +66,13 @@ def test_update_order_status_api_success(client):
 
 
 @pytest.mark.api
+def test_update_order_status_api_not_found(client):
+    response = client.put('/api/orders/NONEXISTENT/status',
+                          json={"new_status": "shipped"})
+    assert response.status_code == 404
+
+
+@pytest.mark.api
 def test_list_all_orders_api_with_data(client):
     client.post('/api/orders', json={"order_id": "LST001",
                 "item_name": "Item A", "quantity": 1, "customer_id": "C1"})

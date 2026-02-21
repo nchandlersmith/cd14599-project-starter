@@ -121,3 +121,26 @@ def test_list_all_orders_success(storage):
     assert len(result) == 2
     assert result["id1"] == order1
     assert result["id2"] == order2
+
+
+def test_update_order_status_integration_success(storage):
+    order_tracker = OrderTracker(storage)
+    order = {
+        "id": "some_id",
+        "item_name": "some_item",
+        "quantity": 1,
+        "customer_id": "some_customer",
+        "status": "pending"
+    }
+    storage.save_order(order["id"], order)
+
+    updated_order = order_tracker.update_order_status("some_id", "shipped")
+
+    assert updated_order["status"] == "shipped"
+    assert storage.get_order("some_id")["status"] == "shipped"
+    
+    
+def test_update_order_status_integration_not_found(storage):
+    order_tracker = OrderTracker(storage)
+    with pytest.raises(NotFoundError, match="Order not found for order_id: nonexistent_id"):
+        order_tracker.update_order_status("nonexistent_id", "shipped")

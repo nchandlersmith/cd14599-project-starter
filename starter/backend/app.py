@@ -41,7 +41,9 @@ def get_order_api(order_id):
 
 @app.route('/api/orders/<string:order_id>/status', methods=['PUT'])
 def update_order_status_api(order_id):
-    pass
+    updated_order = order_tracker.update_order_status(
+        order_id, request.get_json().get("new_status"))
+    return jsonify(updated_order), 200
 
 
 @app.route('/api/orders', methods=['GET'])
