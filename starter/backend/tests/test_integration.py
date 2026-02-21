@@ -32,6 +32,21 @@ def test_add_order_integration_success(storage):
 
 
 @pytest.mark.integration
+def test_add_order_success_status_pending_by_default(storage):
+    order_tracker = OrderTracker(storage)
+    expected_order = {
+        "order_id": "some_id",
+        "item_name": "some_item",
+        "quantity": 1,
+        "customer_id": "some_customer",
+    }
+
+    order_tracker.add_order(**expected_order)
+
+    assert storage.get_order("some_id") == {**expected_order, "status": "pending"}
+
+
+@pytest.mark.integration
 def test_get_order_by_id_integration_success(storage):
     order_tracker = OrderTracker(storage)
     expected_order = {
