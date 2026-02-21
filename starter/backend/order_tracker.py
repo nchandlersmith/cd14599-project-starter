@@ -28,7 +28,7 @@ class OrderTracker:
         pass
 
     def list_all_orders(self):
-        return None
+        return self.storage.get_all_orders()
 
     def list_orders_by_status(self, status: str):
         pass

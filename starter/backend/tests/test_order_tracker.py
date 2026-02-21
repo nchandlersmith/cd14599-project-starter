@@ -75,3 +75,16 @@ def test_get_order_by_id_returns_order(order_tracker, mock_storage):
 
     assert result == order
     mock_storage.get_order.assert_called_once_with("some_id")
+
+
+def test_list_all_orders(order_tracker, mock_storage):
+    orders = {
+        "id1": {"id": "id1", "item_name": "item1", "quantity": 1, "customer_id": "customer1", "status": "pending"},
+        "id2": {"id": "id2", "item_name": "item2", "quantity": 2, "customer_id": "customer2", "status": "shipped"}
+    }
+    mock_storage.get_all_orders.return_value = orders
+
+    result = order_tracker.list_all_orders()
+
+    assert result == orders
+    mock_storage.get_all_orders.assert_called_once()

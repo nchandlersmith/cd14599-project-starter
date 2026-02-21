@@ -103,5 +103,5 @@ def test_get_all_orders_success(storage):
     result = order_tracker.list_all_orders()
 
     assert len(result) == 2
-    assert order1 in result
-    assert order2 in result
+    assert result["id1"] == order1
+    assert result["id2"] == order2
