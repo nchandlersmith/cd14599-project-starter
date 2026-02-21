@@ -95,7 +95,7 @@ def test_get_order_by_id_integration_returns_correct_order(storage):
     assert result == order2
     
 
-def test_get_all_orders_success(storage):
+def test_list_all_orders_success(storage):
     order_tracker = OrderTracker(storage)
     order1 = {
         "id": "id1",
