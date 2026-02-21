@@ -3,7 +3,7 @@
 from flask import Flask, request, jsonify, send_from_directory
 from backend.order_tracker import OrderTracker
 from backend.in_memory_storage import InMemoryStorage
-from starter.backend.errors import FieldValidationError, NotFoundError
+from backend.errors import FieldValidationError, NotFoundError
 
 app = Flask(__name__, static_folder='../frontend')
 in_memory_storage = InMemoryStorage()

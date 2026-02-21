@@ -6,9 +6,9 @@ The storage layer is the in-memory storage implementation, which is used in the 
 
 import pytest
 
-from starter.backend.errors import NotFoundError
-from starter.backend.in_memory_storage import InMemoryStorage
-from starter.backend.order_tracker import OrderTracker
+from backend.errors import NotFoundError
+from backend.in_memory_storage import InMemoryStorage
+from backend.order_tracker import OrderTracker
 
 
 @pytest.fixture
