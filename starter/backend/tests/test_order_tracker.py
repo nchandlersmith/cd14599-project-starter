@@ -38,13 +38,23 @@ def test_constructor_fails_with_non_callable_storage():
 
 def test_add_order_stores_new_order(order_tracker):
     storage = order_tracker.storage
-    order = {"id": "some_id", "item_name": "some_item", "quantity": 1,
+    order = {"order_id": "some_id", "item_name": "some_item", "quantity": 1,
              "customer_id": "some_customer", "status": "some_status"}
 
-    order_tracker.add_order(order["id"], order["item_name"],
-                            order["quantity"], order["customer_id"], order["status"])
+    order_tracker.add_order(**order)
 
-    storage.save_order.assert_called_once_with(order["id"], order)
+    storage.save_order.assert_called_once_with(order["order_id"], order)
+
+
+def test_add_order_status_defaults_to_pending(order_tracker):
+    storage = order_tracker.storage
+    order = {"order_id": "some_id", "item_name": "some_item", "quantity": 1,
+             "customer_id": "some_customer"}
+
+    order_tracker.add_order(**order)
+
+    storage.save_order.assert_called_once_with(
+        order["order_id"], {**order, "status": "pending"})
 
 
 @pytest.mark.parametrize("order_id, item_name, quantity, customer_id, expected_error", [
@@ -67,7 +77,7 @@ def test_add_order_fails_with_invalid_quantity(order_tracker, quantity):
 
 
 def test_get_order_by_id_returns_order(order_tracker, mock_storage):
-    order = {"id": "some_id", "item_name": "some_item", "quantity": 1,
+    order = {"order_id": "some_id", "item_name": "some_item", "quantity": 1,
              "customer_id": "some_customer", "status": "some_status"}
     mock_storage.get_order.return_value = order
 
