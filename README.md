@@ -1,3 +1,18 @@
+# Notes to grader
+
+- Running on port 8000 due to conflict on dev laptop
+- Added unit tests /tests/test_integration.py. I needed confidence in that integration.
+- Added sad path tests in the api to cover the error handling
+- Not returning a 404 unless it blocked an action, i.e. update order
+- Next steps
+  - Persistent storage -- productionize early
+  - Refactor the validations in the order tacker. By creating a validator class that output a ValidatedOrder. This would:
+    - Centralize the field validation logic
+    - DRY it out
+    - Slim down the service logic
+  - Then do delete, given the pattern has emerged and I want to test that hyp0thesis on the design.
+
+
 # Udatracker with Test-Driven Development (TDD)
 
 Welcome to the Udatracker project! This guide will walk you through implementing the backend logic and API for your project using a strict **Test-Driven Development (TDD)** workflow.
