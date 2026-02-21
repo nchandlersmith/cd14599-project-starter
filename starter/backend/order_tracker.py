@@ -1,5 +1,5 @@
-# This module contains the OrderTracker class, which encapsulates the core
-# business logic for managing orders.
+"""This module contains the OrderTracker class, which encapsulates the core
+    business logic for managing orders. """
 
 from starter.errors import FieldValidationError
 
@@ -28,7 +28,9 @@ class OrderTracker:
         return self.storage.get_order(order_id)
 
     def update_order_status(self, order_id: str, new_status: str):
-        pass
+        self.storage.save_order(
+            order_id, {**self.storage.get_order(order_id), "status": new_status})
+        return self.storage.get_order(order_id)
 
     def list_all_orders(self):
         return self.storage.get_all_orders()

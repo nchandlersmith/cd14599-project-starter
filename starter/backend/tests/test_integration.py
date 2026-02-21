@@ -43,7 +43,8 @@ def test_add_order_success_status_pending_by_default(storage):
 
     order_tracker.add_order(**expected_order)
 
-    assert storage.get_order("some_id") == {**expected_order, "status": "pending"}
+    assert storage.get_order("some_id") == {
+        **expected_order, "status": "pending"}
 
 
 @pytest.mark.integration
@@ -59,7 +60,7 @@ def test_get_order_by_id_integration_success(storage):
     storage.save_order(expected_order["id"], expected_order)
 
     result = order_tracker.get_order_by_id("some_id")
-    
+
     assert result == expected_order
 
 
@@ -93,7 +94,7 @@ def test_get_order_by_id_integration_returns_correct_order(storage):
     result = order_tracker.get_order_by_id("id2")
 
     assert result == order2
-    
+
 
 def test_list_all_orders_success(storage):
     order_tracker = OrderTracker(storage)

@@ -1,3 +1,5 @@
+"""Flask API for order management."""
+
 from flask import Flask, request, jsonify, send_from_directory
 from backend.order_tracker import OrderTracker
 from backend.in_memory_storage import InMemoryStorage

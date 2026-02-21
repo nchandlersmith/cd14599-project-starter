@@ -1,3 +1,5 @@
+"""End-to-end tests for the Flask API endpoints."""
+
 import pytest
 from backend.app import app, in_memory_storage
 
@@ -19,7 +21,8 @@ def test_add_order_api_success(client):
     response = client.post('/api/orders', json=order_data)
     assert response.status_code == 201
     assert response.json['order_id'] == "API001"
-    
+
+
 @pytest.mark.api
 def test_add_order_api_missing_fields(client):
     order_data = {
@@ -27,7 +30,8 @@ def test_add_order_api_missing_fields(client):
     }
     response = client.post('/api/orders', json=order_data)
     assert response.status_code == 400
-    assert "Missing the following required fields: order_id" in response.get_data(as_text=True)
+    assert "Missing the following required fields: order_id" in response.get_data(
+        as_text=True)
 
 
 @pytest.mark.api

@@ -1,3 +1,5 @@
+"""Unit tests for the OrderTracker class."""
+
 from unittest.mock import Mock
 import pytest
 
@@ -128,3 +130,15 @@ def test_list_all_orders(order_tracker, mock_storage):
 
     assert result == orders
     mock_storage.get_all_orders.assert_called_once()
+
+
+def test_update_order_status_success_returns_updated_order(order_tracker, mock_storage):
+    order = {"order_id": "some_id", "item_name": "some_item", "quantity": 1,
+             "customer_id": "some_customer", "status": "pending"}
+    updated_order = {**order, "status": "shipped"}
+    mock_storage.get_order.return_value = order
+    mock_storage.get_order.return_value = updated_order
+
+    result = order_tracker.update_order_status("some_id", "shipped")
+    assert result == updated_order
+    mock_storage.save_order.assert_called_once_with(order["order_id"], updated_order)
