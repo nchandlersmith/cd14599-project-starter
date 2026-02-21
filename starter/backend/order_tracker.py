@@ -41,6 +41,12 @@ class OrderTracker:
                     f"Storage object must implement the following callable methods: {', '.join(required_methods)}.")
 
     def _validate_order(self, order_id, item_name, quantity, customer_id):
+        self._validate_fields_not_missing(
+            order_id, item_name, quantity, customer_id)
+        self._validate_fields_nonempty(order_id, item_name, customer_id)
+        self._validate_quantity(quantity)
+
+    def _validate_fields_not_missing(self, order_id, item_name, quantity, customer_id):
         missing_fields = []
         if order_id is None:
             missing_fields.append("order_id")
@@ -53,15 +59,19 @@ class OrderTracker:
         if missing_fields:
             raise TypeError(
                 f"Missing the following required fields: {', '.join(missing_fields)}")
+
+    def _validate_fields_nonempty(self, order_id, item_name, customer_id):
         not_string_fields = []
-        if not isinstance(order_id, str):
+        if not isinstance(order_id, str) or not order_id.strip():
             not_string_fields.append("order_id")
-        if not isinstance(item_name, str):
+        if not isinstance(item_name, str) or not item_name.strip():
             not_string_fields.append("item_name")
-        if not isinstance(customer_id, str):
+        if not isinstance(customer_id, str) or not customer_id.strip():
             not_string_fields.append("customer_id")
         if not_string_fields:
             raise TypeError(
-                f"The following fields must be non-empty strings: {', '.join(not_string_fields)}")
+                f"The following fields must be non-empty or blank strings: {', '.join(not_string_fields)}")
+
+    def _validate_quantity(self, quantity):
         if not isinstance(quantity, int) or quantity < 1:
             raise ValueError("Quantity must be a positive integer.")
