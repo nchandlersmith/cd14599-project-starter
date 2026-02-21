@@ -1,5 +1,7 @@
 from unittest.mock import Mock
 import pytest
+
+from starter.errors import FieldValidationError
 from ..order_tracker import OrderTracker
 
 # --- Fixtures for Unit Tests ---
@@ -66,7 +68,7 @@ def test_add_order_status_defaults_to_pending(order_tracker):
      "Missing the following required fields: order_id, item_name, quantity, customer_id")
 ])
 def test_add_order_fails_with_missing_fields(order_tracker, order_id, item_name, quantity, customer_id, expected_error):
-    with pytest.raises(TypeError, match=expected_error):
+    with pytest.raises(FieldValidationError, match=expected_error):
         order_tracker.add_order(order_id, item_name, quantity, customer_id)
 
 
@@ -80,7 +82,7 @@ def test_add_order_fails_with_missing_fields(order_tracker, order_id, item_name,
     (9001, 7878, 1, 314, "The following fields must be non-empty or blank strings: order_id, item_name, customer_id")
 ])
 def test_add_order_fails_with_wrong_field_type(order_tracker, order_id, item_name, quantity, customer_id, expected_error):
-    with pytest.raises(TypeError, match=expected_error):
+    with pytest.raises(FieldValidationError, match=expected_error):
         order_tracker.add_order(order_id, item_name, quantity, customer_id)
 
 
@@ -94,13 +96,13 @@ def test_add_order_fails_with_wrong_field_type(order_tracker, order_id, item_nam
     (" ", " ", 1, " ", "The following fields must be non-empty or blank strings: order_id, item_name, customer_id")
 ])
 def test_add_order_fails_with_empty_strings(order_tracker, order_id, item_name, quantity, customer_id, expected_error):
-    with pytest.raises(TypeError, match=expected_error):
+    with pytest.raises(FieldValidationError, match=expected_error):
         order_tracker.add_order(order_id, item_name, quantity, customer_id)
 
 
 @pytest.mark.parametrize("quantity", [0, -1, "foo"])
 def test_add_order_fails_with_invalid_quantity(order_tracker, quantity):
-    with pytest.raises(ValueError, match="Quantity must be a positive integer."):
+    with pytest.raises(FieldValidationError, match="Quantity must be a positive integer."):
         order_tracker.add_order("id", "item", quantity, "customer")
 
 

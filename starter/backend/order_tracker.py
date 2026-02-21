@@ -1,6 +1,9 @@
 # This module contains the OrderTracker class, which encapsulates the core
 # business logic for managing orders.
 
+from starter.errors import FieldValidationError
+
+
 class OrderTracker:
     """
     Manages customer orders, providing functionalities to add, update,
@@ -57,7 +60,7 @@ class OrderTracker:
         if customer_id is None:
             missing_fields.append("customer_id")
         if missing_fields:
-            raise TypeError(
+            raise FieldValidationError(
                 f"Missing the following required fields: {', '.join(missing_fields)}")
 
     def _validate_fields_nonempty(self, order_id, item_name, customer_id):
@@ -69,9 +72,9 @@ class OrderTracker:
         if not isinstance(customer_id, str) or not customer_id.strip():
             not_string_fields.append("customer_id")
         if not_string_fields:
-            raise TypeError(
+            raise FieldValidationError(
                 f"The following fields must be non-empty or blank strings: {', '.join(not_string_fields)}")
 
     def _validate_quantity(self, quantity):
         if not isinstance(quantity, int) or quantity < 1:
-            raise ValueError("Quantity must be a positive integer.")
+            raise FieldValidationError("Quantity must be a positive integer.")
