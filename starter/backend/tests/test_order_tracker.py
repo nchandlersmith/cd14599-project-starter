@@ -3,7 +3,7 @@
 from unittest.mock import Mock
 import pytest
 
-from starter.errors import FieldValidationError
+from starter.backend.errors import FieldValidationError, NotFoundError
 from ..order_tracker import OrderTracker
 
 # --- Fixtures for Unit Tests ---
@@ -141,4 +141,11 @@ def test_update_order_status_success_returns_updated_order(order_tracker, mock_s
 
     result = order_tracker.update_order_status("some_id", "shipped")
     assert result == updated_order
-    mock_storage.save_order.assert_called_once_with(order["order_id"], updated_order)
+    mock_storage.save_order.assert_called_once_with(
+        order["order_id"], updated_order)
+
+
+def test_update_order_status_raises_error_if_order_not_found(order_tracker, mock_storage):
+    mock_storage.get_order.return_value = None
+    with pytest.raises(NotFoundError, match="Order not found for order_id: nonexistent_id"):
+        order_tracker.update_order_status("nonexistent_id", "shipped")

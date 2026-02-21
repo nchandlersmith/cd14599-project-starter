@@ -3,7 +3,7 @@
 from flask import Flask, request, jsonify, send_from_directory
 from backend.order_tracker import OrderTracker
 from backend.in_memory_storage import InMemoryStorage
-from starter.errors import FieldValidationError
+from starter.backend.errors import FieldValidationError
 
 app = Flask(__name__, static_folder='../frontend')
 in_memory_storage = InMemoryStorage()
@@ -54,7 +54,7 @@ def list_orders_api():
 @app.errorhandler(FieldValidationError)
 def handle_bad_request(error):
     response = jsonify({"error": str(error)})
-    response.status_code = 400
+    response.status_code = error.status_code
     return response
 
 

@@ -14,3 +14,18 @@ class FieldValidationError(Exception):
         super().__init__(message)
         self.message = message
         self.status_code = status_code
+
+
+class NotFoundError(Exception):
+    """
+    Custom exception for when an order is not found.
+    Attributes:
+        message (str): The error message describing the error.
+        status_code (int): The HTTP status code to return when this error 
+        is raised (default is 404 for Not Found).
+    """
+
+    def __init__(self, message, status_code=404):
+        super().__init__(message)
+        self.message = message
+        self.status_code = status_code
