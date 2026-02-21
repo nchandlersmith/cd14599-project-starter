@@ -66,7 +66,18 @@ def test_add_order_status_defaults_to_pending(order_tracker):
      "Missing the following required fields: order_id, item_name, quantity, customer_id")
 ])
 def test_add_order_fails_with_missing_fields(order_tracker, order_id, item_name, quantity, customer_id, expected_error):
-    with pytest.raises(ValueError, match=expected_error):
+    with pytest.raises(TypeError, match=expected_error):
+        order_tracker.add_order(order_id, item_name, quantity, customer_id)
+        
+
+@pytest.mark.parametrize("order_id, item_name, quantity, customer_id, expected_error", [
+    (20, "item", 1, "customer", "The following fields must be non-empty strings: order_id"),
+    ("id", 30, 1, "customer", "The following fields must be non-empty strings: item_name"),
+    ("id", "item", 1, 789, "The following fields must be non-empty strings: customer_id"),
+    (9001, 7878, 1, 314, "The following fields must be non-empty strings: order_id, item_name, customer_id")
+])
+def test_add_order_fails_with_wrong_field_type(order_tracker, order_id, item_name, quantity, customer_id, expected_error):
+    with pytest.raises(TypeError, match=expected_error):
         order_tracker.add_order(order_id, item_name, quantity, customer_id)
 
 

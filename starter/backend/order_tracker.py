@@ -51,7 +51,17 @@ class OrderTracker:
         if customer_id is None:
             missing_fields.append("customer_id")
         if missing_fields:
-            raise ValueError(
+            raise TypeError(
                 f"Missing the following required fields: {', '.join(missing_fields)}")
+        not_string_fields = []
+        if not isinstance(order_id, str):
+            not_string_fields.append("order_id")
+        if not isinstance(item_name, str):
+            not_string_fields.append("item_name")
+        if not isinstance(customer_id, str):
+            not_string_fields.append("customer_id")
+        if not_string_fields:
+            raise TypeError(
+                f"The following fields must be non-empty strings: {', '.join(not_string_fields)}")
         if not isinstance(quantity, int) or quantity < 1:
             raise ValueError("Quantity must be a positive integer.")
