@@ -46,7 +46,7 @@ def update_order_status_api(order_id):
 
 @app.route('/api/orders', methods=['GET'])
 def list_orders_api():
-    pass
+    return jsonify(list(order_tracker.list_all_orders().values())), 200
 
 
 @app.errorhandler(FieldValidationError)
