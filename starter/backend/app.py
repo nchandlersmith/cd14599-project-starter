@@ -3,7 +3,7 @@
 from flask import Flask, request, jsonify, send_from_directory
 from backend.order_tracker import OrderTracker
 from backend.in_memory_storage import InMemoryStorage
-from starter.backend.errors import FieldValidationError
+from starter.backend.errors import FieldValidationError, NotFoundError
 
 app = Flask(__name__, static_folder='../frontend')
 in_memory_storage = InMemoryStorage()
@@ -36,8 +36,6 @@ def add_order_api():
 @app.route('/api/orders/<string:order_id>', methods=['GET'])
 def get_order_api(order_id):
     order = order_tracker.get_order_by_id(order_id)
-    if order is None:
-        return jsonify({"error": "Order not found"}), 404
     return jsonify(order), 200
 
 
@@ -53,6 +51,13 @@ def list_orders_api():
 
 @app.errorhandler(FieldValidationError)
 def handle_bad_request(error):
+    response = jsonify({"error": str(error)})
+    response.status_code = error.status_code
+    return response
+
+
+@app.errorhandler(NotFoundError)
+def handle_not_found(error):
     response = jsonify({"error": str(error)})
     response.status_code = error.status_code
     return response

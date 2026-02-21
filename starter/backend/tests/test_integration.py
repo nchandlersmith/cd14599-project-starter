@@ -6,6 +6,7 @@ The storage layer is the in-memory storage implementation, which is used in the 
 
 import pytest
 
+from starter.backend.errors import NotFoundError
 from starter.backend.in_memory_storage import InMemoryStorage
 from starter.backend.order_tracker import OrderTracker
 
@@ -67,8 +68,8 @@ def test_get_order_by_id_integration_success(storage):
 @pytest.mark.integration
 def test_get_order_by_id_integration_not_found(storage):
     order_tracker = OrderTracker(storage)
-    result = order_tracker.get_order_by_id("nonexistent_id")
-    assert result is None
+    with pytest.raises(NotFoundError, match="Order not found for order_id: nonexistent_id"):
+        order_tracker.get_order_by_id("nonexistent_id")
 
 
 @pytest.mark.integration

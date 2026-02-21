@@ -25,7 +25,11 @@ class OrderTracker:
         })
 
     def get_order_by_id(self, order_id: str):
-        return self.storage.get_order(order_id)
+        order = self.storage.get_order(order_id)
+        if order is None:
+            raise NotFoundError(
+                f"Order not found for order_id: {order_id}")
+        return order
 
     def update_order_status(self, order_id: str, new_status: str):
         existing_order = self.storage.get_order(order_id)

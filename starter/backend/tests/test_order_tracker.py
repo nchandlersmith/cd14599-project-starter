@@ -119,6 +119,12 @@ def test_get_order_by_id_returns_order(order_tracker, mock_storage):
     mock_storage.get_order.assert_called_once_with("some_id")
 
 
+def test_get_order_by_id_raises_error_if_order_not_found(order_tracker, mock_storage):
+    mock_storage.get_order.return_value = None
+    with pytest.raises(NotFoundError, match="Order not found for order_id: nonexistent_id"):
+        order_tracker.get_order_by_id("nonexistent_id")
+
+
 def test_list_all_orders(order_tracker, mock_storage):
     orders = {
         "id1": {"id": "id1", "item_name": "item1", "quantity": 1, "customer_id": "customer1", "status": "pending"},
