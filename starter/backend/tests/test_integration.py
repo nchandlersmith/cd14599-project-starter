@@ -27,9 +27,11 @@ def test_add_order_integration_success(storage):
         "status": "some_status"
     }
 
-    order_tracker.add_order(**expected_order)
+    result = order_tracker.add_order(**expected_order)
 
     assert storage.get_order("some_id") == expected_order
+    assert storage.get_all_orders() == {"some_id": expected_order}
+    assert result == expected_order
 
 
 @pytest.mark.integration

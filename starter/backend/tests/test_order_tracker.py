@@ -44,10 +44,11 @@ def test_add_order_stores_new_order(order_tracker):
     storage = order_tracker.storage
     order = {"order_id": "some_id", "item_name": "some_item", "quantity": 1,
              "customer_id": "some_customer", "status": "some_status"}
-
-    order_tracker.add_order(**order)
+    storage.get_order.return_value = order
+    result = order_tracker.add_order(**order)
 
     storage.save_order.assert_called_once_with(order["order_id"], order)
+    assert result == order
 
 
 def test_add_order_status_defaults_to_pending(order_tracker):

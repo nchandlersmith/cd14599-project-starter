@@ -23,6 +23,7 @@ class OrderTracker:
             "customer_id": customer_id,
             "status": status
         })
+        return self.storage.get_order(order_id)
 
     def get_order_by_id(self, order_id: str):
         order = self.storage.get_order(order_id)
