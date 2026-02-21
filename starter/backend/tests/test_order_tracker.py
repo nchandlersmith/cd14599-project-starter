@@ -155,3 +155,38 @@ def test_update_order_status_raises_error_if_order_not_found(order_tracker, mock
     mock_storage.get_order.return_value = None
     with pytest.raises(NotFoundError, match="Order not found for order_id: nonexistent_id"):
         order_tracker.update_order_status("nonexistent_id", "shipped")
+
+
+def test_list_orders_by_status_success(order_tracker, mock_storage):
+    orders = {
+        "id1": {"id": "id1", "item_name": "item1", "quantity": 1, "customer_id": "customer1", "status": "pending"},
+        "id2": {"id": "id2", "item_name": "item2", "quantity": 2, "customer_id": "customer2", "status": "shipped"},
+        "id3": {"id": "id3", "item_name": "item3", "quantity": 3, "customer_id": "customer3", "status": "pending"}
+    }
+    mock_storage.get_all_orders.return_value = orders
+
+    result = order_tracker.list_orders_by_status("pending")
+
+    expected_result = {
+        "id1": orders["id1"],
+        "id3": orders["id3"]
+    }
+    assert result == expected_result
+    mock_storage.get_all_orders.assert_called_once()
+
+
+# Adding test to be explicit about the case where no orders match the given status
+def test_list_orders_by_status_returns_empty_if_no_orders_match(order_tracker, mock_storage):
+    orders = {
+        "id1": {"id": "id1", "item_name": "item1", "quantity": 1, "customer_id": "customer1", "status": "pending"},
+        "id2": {"id": "id2", "item_name": "item2", "quantity": 2, "customer_id": "customer2", "status": "shipped"},
+        "id3": {"id": "id3", "item_name": "item3", "quantity": 3, "customer_id": "customer3", "status": "pending"}
+    }
+    mock_storage.get_all_orders.return_value = orders
+
+    result = order_tracker.list_orders_by_status("delivered")
+
+    expected_result = {}
+
+    assert result == expected_result
+    mock_storage.get_all_orders.assert_called_once()

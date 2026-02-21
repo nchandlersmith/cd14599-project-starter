@@ -39,9 +39,6 @@ def test_get_order_api_success(client):
     order = {
         "order_id": "GET001", "item_name": "Test Item", "quantity": 1, "customer_id": "C1"
     }
-    # Directly use the in-memory storage to set up the order for retrieval.
-    # This allows us to test the API's ability to retrieve existing orders without relying on the add_order API.
-    in_memory_storage.save_order(order["order_id"], order)
     client.post('/api/orders', json=order)
     response = client.get('/api/orders/GET001')
     assert response.status_code == 200

@@ -97,6 +97,7 @@ def test_get_order_by_id_integration_returns_correct_order(storage):
     assert result == order2
 
 
+@pytest.mark.integration
 def test_list_all_orders_success(storage):
     order_tracker = OrderTracker(storage)
     order1 = {
@@ -123,6 +124,7 @@ def test_list_all_orders_success(storage):
     assert result["id2"] == order2
 
 
+@pytest.mark.integration
 def test_update_order_status_integration_success(storage):
     order_tracker = OrderTracker(storage)
     order = {
@@ -140,7 +142,76 @@ def test_update_order_status_integration_success(storage):
     assert storage.get_order("some_id")["status"] == "shipped"
     
     
+@pytest.mark.integration
 def test_update_order_status_integration_not_found(storage):
     order_tracker = OrderTracker(storage)
     with pytest.raises(NotFoundError, match="Order not found for order_id: nonexistent_id"):
         order_tracker.update_order_status("nonexistent_id", "shipped")
+
+
+@pytest.mark.integration
+def test_list_orders_by_status_integration_success(storage):
+    order_tracker = OrderTracker(storage)
+    order1 = {
+        "id": "id1",
+        "item_name": "item1",
+        "quantity": 1,
+        "customer_id": "customer1",
+        "status": "pending"
+    }
+    order2 = {
+        "id": "id2",
+        "item_name": "item2",
+        "quantity": 2,
+        "customer_id": "customer2",
+        "status": "shipped"
+    }
+    order3 = {
+        "id": "id3",
+        "item_name": "item3",
+        "quantity": 3,
+        "customer_id": "customer3",
+        "status": "pending"
+    }
+    storage.save_order(order1["id"], order1)
+    storage.save_order(order2["id"], order2)
+    storage.save_order(order3["id"], order3)
+
+    result = order_tracker.list_orders_by_status("pending")
+
+    assert len(result) == 2
+    assert result["id1"] == order1
+    assert result["id3"] == order3
+
+
+@pytest.mark.integration
+def test_list_orders_by_status_integration_none_for_status(storage):
+    order_tracker = OrderTracker(storage)
+    order1 = {
+        "id": "id1",
+        "item_name": "item1",
+        "quantity": 1,
+        "customer_id": "customer1",
+        "status": "pending"
+    }
+    order2 = {
+        "id": "id2",
+        "item_name": "item2",
+        "quantity": 2,
+        "customer_id": "customer2",
+        "status": "shipped"
+    }
+    order3 = {
+        "id": "id3",
+        "item_name": "item3",
+        "quantity": 3,
+        "customer_id": "customer3",
+        "status": "pending"
+    }
+    storage.save_order(order1["id"], order1)
+    storage.save_order(order2["id"], order2)
+    storage.save_order(order3["id"], order3)
+
+    result = order_tracker.list_orders_by_status("in_process")
+
+    assert len(result) == 0
