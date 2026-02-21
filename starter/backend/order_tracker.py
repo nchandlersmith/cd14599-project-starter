@@ -50,30 +50,25 @@ class OrderTracker:
         self._validate_quantity(quantity)
 
     def _validate_fields_not_missing(self, order_id, item_name, quantity, customer_id):
-        missing_fields = []
-        if order_id is None:
-            missing_fields.append("order_id")
-        if item_name is None:
-            missing_fields.append("item_name")
-        if quantity is None:
-            missing_fields.append("quantity")
-        if customer_id is None:
-            missing_fields.append("customer_id")
+        fields_to_check = {"order_id": order_id, "item_name": item_name,
+                           "quantity": quantity, "customer_id": customer_id}
+        missing_fields = [field_name for field_name,
+                          value in fields_to_check.items() if value is None]
         if missing_fields:
             raise FieldValidationError(
                 f"Missing the following required fields: {', '.join(missing_fields)}")
 
     def _validate_fields_nonempty(self, order_id, item_name, customer_id):
-        not_string_fields = []
-        if not isinstance(order_id, str) or not order_id.strip():
-            not_string_fields.append("order_id")
-        if not isinstance(item_name, str) or not item_name.strip():
-            not_string_fields.append("item_name")
-        if not isinstance(customer_id, str) or not customer_id.strip():
-            not_string_fields.append("customer_id")
+        fields_to_check = {"order_id": order_id,
+                           "item_name": item_name, "customer_id": customer_id}
+        not_string_fields = [field_name for field_name, value in fields_to_check.items(
+        ) if self._is_not_empty_or_blank_string(value)]
         if not_string_fields:
             raise FieldValidationError(
                 f"The following fields must be non-empty or blank strings: {', '.join(not_string_fields)}")
+
+    def _is_not_empty_or_blank_string(self, value):
+        return not isinstance(value, str) or not value.strip()
 
     def _validate_quantity(self, quantity):
         if not isinstance(quantity, int) or quantity < 1:
