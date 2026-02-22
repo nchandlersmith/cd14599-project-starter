@@ -122,8 +122,8 @@ def test_list_all_orders_success(storage):
     result = order_tracker.list_all_orders()
 
     assert len(result) == 2
-    assert result["id1"] == order1
-    assert result["id2"] == order2
+    assert result[0] == order1
+    assert result[1] == order2
 
 
 @pytest.mark.integration

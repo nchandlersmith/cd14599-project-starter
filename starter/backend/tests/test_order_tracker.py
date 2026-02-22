@@ -135,7 +135,7 @@ def test_list_all_orders(order_tracker, mock_storage):
 
     result = order_tracker.list_all_orders()
 
-    assert result == orders
+    assert result == [orders["id1"], orders["id2"]]
     mock_storage.get_all_orders.assert_called_once()
 
 

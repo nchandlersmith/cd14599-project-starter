@@ -52,7 +52,7 @@ def list_orders_api():
         status = request.args.get("status")
         orders = order_tracker.list_orders_by_status(status)
         return jsonify(list(orders.values())), 200
-    return jsonify(list(order_tracker.list_all_orders().values())), 200
+    return jsonify(list(order_tracker.list_all_orders())), 200
 
 
 @app.errorhandler(FieldValidationError)

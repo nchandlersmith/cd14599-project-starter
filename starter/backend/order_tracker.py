@@ -42,7 +42,7 @@ class OrderTracker:
         return self.storage.get_order(order_id)
 
     def list_all_orders(self):
-        return self.storage.get_all_orders()
+        return [order for order in self.storage.get_all_orders().values()]
 
     def list_orders_by_status(self, status: str):
         all_orders = self.storage.get_all_orders()
