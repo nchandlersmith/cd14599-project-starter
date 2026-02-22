@@ -5,6 +5,7 @@
 - Added sad path tests in the api to cover the error handling
 - Not returning a 404 unless it blocked an action, i.e. update order
 - Next steps
+  - Given the sad state of affairs in the test_api.py tests that I cannot touch. The add order, get all orders, and get all orders by status tests in said file are incomplete in that they don't actually test the shape of the data in the response. I cannot edit these tests, so and Udacity should know better, that Python being a weakly typed language isn't going to enforce typing, therefore the desired return shape should be tested explicitly. Normally, I would just fix it, but I am not supposed to touch those tests. This is an opportunity for Udacity to align the tests with the rubric.
   - Persistent storage -- productionize early
   - Refactor the validations in the order tacker. By creating a validator class that output a ValidatedOrder. This would:
     - Centralize the field validation logic
