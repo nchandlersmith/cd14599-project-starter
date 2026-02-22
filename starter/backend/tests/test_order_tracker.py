@@ -168,10 +168,7 @@ def test_list_orders_by_status_success(order_tracker, mock_storage):
 
     result = order_tracker.list_orders_by_status("pending")
 
-    expected_result = {
-        "id1": orders["id1"],
-        "id3": orders["id3"]
-    }
+    expected_result = [orders["id1"], orders["id3"]]
     assert result == expected_result
     mock_storage.get_all_orders.assert_called_once()
 
@@ -187,7 +184,7 @@ def test_list_orders_by_status_returns_empty_if_no_orders_match(order_tracker, m
 
     result = order_tracker.list_orders_by_status("delivered")
 
-    expected_result = {}
+    expected_result = []
 
     assert result == expected_result
     mock_storage.get_all_orders.assert_called_once()

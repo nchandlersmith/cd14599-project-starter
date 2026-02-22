@@ -182,8 +182,8 @@ def test_list_orders_by_status_integration_success(storage):
     result = order_tracker.list_orders_by_status("pending")
 
     assert len(result) == 2
-    assert result["id1"] == order1
-    assert result["id3"] == order3
+    assert result[0] == order1
+    assert result[1] == order3
 
 
 @pytest.mark.integration

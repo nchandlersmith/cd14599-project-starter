@@ -46,9 +46,7 @@ class OrderTracker:
 
     def list_orders_by_status(self, status: str):
         all_orders = self.storage.get_all_orders()
-        return {order_id: order
-                for order_id, order in all_orders.items()
-                if order["status"] == status}
+        return [order for order in all_orders.values() if order.get("status") == status]
 
     def _validate_storage(self, storage):
         required_methods = ['save_order', 'get_order', 'get_all_orders']
